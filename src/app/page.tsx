@@ -1,43 +1,92 @@
 "use client";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import ContaCard from "@/components/ContaCard";
 import CriarDialog from "@/components/CriarDialog";
-import { useState } from "react";
-import axios from "axios";
 
+interface Conta {
+  id: number;
+  name: string;
+  type: string;
+  balance: number;
+}
 
 export default function Home() {
+  const [contas, setContas] = useState<Conta[]>([]);
+
+  useEffect(() => {
+    fetchContas();
+  }, []);
+
+  const fetchContas = async () => {
+    try {
+      const response = await axios.get("http://localhost:3001/accounts");
+      setContas(response.data);
+    } catch (error) {
+      console.error("Erro ao buscar contas:", error);
+    }
+  };
+
+  const handleDelete = async (id: number) => {
+    try {
+      await axios.delete(`http://localhost:3001/accounts/${id}`);
+      setContas((prev) => prev.filter((c) => c.id !== id));
+    } catch (error) {
+      console.error("Erro ao apagar conta:", error);
+    }
+  };
+
+  const handleEdit = (id: number) => {
+    alert("Editar conta ID: " + id);
+  };
+
   return (
-      <main className="flex flex-col justify-center m-auto bg-gray-700 text-white w-8/12">
-          <div className="text-center space-y-1 bg-fundo p-8 shadow-lg border-b border-gray-400">
-            <h1 className="text-4xl">Gestor Financeiro Pessoal</h1>
-            <p className="text-lg text-gray-400">subtitulo gestor financeiro</p>
+    <main className="flex flex-col items-center bg-white w-full h-screen font-sans">
+      <div className="text-center bg-white p-5 shadow-lg border-b border-gray-400 w-full">
+        <h1 className="text-2xl font-black">Gestor Financeiro Pessoal</h1>
+        <p className="text-lg text-gray-600">Organize suas finanças com precisão</p>
+      </div>
+      <div className="bg-white w-11/12 mt-12">
+        <div className="flex justify-between py-4 bg-white">
+          <div className="bg-white">
+            <CriarDialog />
+            <button className="w-24 py-2 bg-black text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
+  border-black text-white mr-3">
+              Histórico
+            </button>
+            <button className="w-24 py-2 bg-black text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
+  border-black text-white mr-3">
+              Transferir
+            </button>
           </div>
-          <div className="bg-fundo">
-            <div className="flex justify-between py-4 bg-fundo mt-1">
-              <div className="border border-gray-100 bg-fundocard px-6 py-4 rounded-xl">
-                <CriarDialog />  
-                <button className="px-4 py-2 bg-fundocaixas text-xl rounded-xl hover:bg-blue-600 border border-gray-100 text-white mr-3">historico</button>
-                <button className="px-4 py-2 bg-fundocaixas text-xl rounded-xl hover:bg-blue-600 border border-gray-100 text-white">transferencia</button>
-              </div>
-              <div className="px-6 py-4 border border-gray-100 text-white bg-fundocard text-center rounded-xl">
-                <p>Contas criadas</p>
-                <p className="text-5xl">50</p>
-              </div>
-            </div>
-            <div className="bg-fundocard">
-              <div className="flex flex-col border border-gray-100 justify-between px-6 py-7 mt-1 rounded-xl">
-                  <div className="flex items-center pb-4">
-                    <div className="flex w-full justify-between pr-24 px-4">
-                      <p className="text-lg">NOME</p>
-                      <p className="text-lg">TIPO</p>
-                      <p className="text-lg">SALDO</p>
-                    </div>
-                  </div>
-                <ContaCard nome="Conta Corrente XP" tipo="Corrente" saldo={1500.75} />
-                <ContaCard nome="Poupança Nubank" tipo="Poupança" saldo={2340.10} />
-              </div>
-            </div>
+          <div className="px-5 py-4 border border-black text-white bg-black text-center rounded-xl hover:bg-white hover:text-black transition ease-in-out duration-300 hover:scale-105">
+            <p className="text-base mb-2">Contas criadas</p>
+            <p className="text-5xl">{contas.length}</p>
           </div>
-      </main>
+        </div>
+        <div className="bg-white py-6">
+          <div className="grid grid-cols-[1fr_1fr_1fr_auto] font-semibold text-lg text-gray-600 pb-4 w-3/4">
+            <p className="text-base text-black">Nome</p>
+            <p className="text-base text-black">Tipo</p>
+            <p className="text-base text-black">Saldo</p>
+            <p className="text-base text-black">Ações</p>
+          </div>
+
+          <div>
+            {contas.map((conta) => (
+              <ContaCard
+                key={conta.id}
+                id={conta.id}
+                nome={conta.name}
+                tipo={conta.type}
+                saldo={conta.balance}
+                onDelete={handleDelete}
+                onUpdated={fetchContas}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
