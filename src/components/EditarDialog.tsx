@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   Dialog,
@@ -13,17 +13,36 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export default function CriarDialog() {
+interface EditarDialogProps {
+  id: number;
+  currentName: string;
+  currentType: string;
+  currentBalance: number;
+  onUpdated: () => void; 
+}
+
+export default function EditarDialog({
+  id,
+  currentName,
+  currentType,
+  currentBalance,
+  onUpdated,
+}: EditarDialogProps) {
   const [form, setForm] = useState({
-    name: "",
-    type: "",
-    balance: "",
+    name: currentName,
+    type: currentType,
+    balance: currentBalance.toString(),
   });
-
   const [loading, setLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState("");
+  const [open, setOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -37,7 +56,6 @@ export default function CriarDialog() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    setSuccessMessage("");
 
     try {
       const payload = {
@@ -46,51 +64,56 @@ export default function CriarDialog() {
         balance: form.balance ? Number(form.balance) : 0,
       };
 
-      const response = await axios.post("http://localhost:3001/accounts", payload);
-      setSuccessMessage("Conta criada com sucesso!");
-      setForm({ name: "", type: "", balance: "" });
-
+      await axios.put(`http://localhost:3001/accounts/${id}`, payload);
+      setOpen(false);
+      onUpdated();
     } catch (error: any) {
-      console.error("Erro ao criar conta:", error);
-      alert("Erro ao criar conta: " + (error.response?.data?.message || error.message));
+      console.error("Erro ao editar conta:", error);
+      alert("Erro ao editar conta: " + (error.response?.data?.message || error.message));
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    setForm({
+      name: currentName,
+      type: currentType,
+      balance: currentBalance.toString(),
+    });
+  }, [currentName, currentType, currentBalance]);
+
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="w-24 py-2 bg-black text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
-  border-black text-white mr-3">
-          Criar
+        <button className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
+          Editar
         </button>
       </DialogTrigger>
 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Criar Nova Conta</DialogTitle>
-          <DialogDescription>Preencha os dados para criar uma nova conta.</DialogDescription>
+          <DialogTitle>Editar Conta</DialogTitle>
+          <DialogDescription>Altere os dados e salve as mudanças.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="name">Nome da Conta</Label>
+            <Label htmlFor="name">Nome</Label>
             <Input
               id="name"
               name="name"
               value={form.name}
               onChange={handleChange}
               required
-              placeholder="Ex: Conta Corrente XP"
             />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="type">Tipo da Conta</Label>
+            <Label htmlFor="type">Tipo</Label>
             <Select onValueChange={handleTipoChange} value={form.type}>
-              <SelectTrigger id="type" className="w-full">
-                <SelectValue placeholder="Selecione o tipo" />
+              <SelectTrigger id="type">
+                <SelectValue placeholder="Tipo da Conta" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="Corrente">Corrente</SelectItem>
@@ -101,14 +124,13 @@ export default function CriarDialog() {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="balance">Saldo Inicial (opcional)</Label>
+            <Label htmlFor="balance">Saldo</Label>
             <Input
               id="balance"
               name="balance"
               type="number"
               value={form.balance}
               onChange={handleChange}
-              placeholder="R$ 0,00"
             />
           </div>
 
@@ -118,10 +140,6 @@ export default function CriarDialog() {
             </Button>
           </DialogFooter>
         </form>
-
-        {successMessage && (
-          <p className="text-green-600 text-sm pt-2">{successMessage}</p>
-        )}
       </DialogContent>
     </Dialog>
   );

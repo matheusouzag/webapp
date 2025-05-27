@@ -1,23 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
+import EditarDialog from './EditarDialog';
 
 interface ContaCardProps {
+  id: number;
   nome: string;
   tipo: string;
   saldo: number;
+  onDelete: (id: number) => void;
+  onUpdated: () => void;
 }
 
-const ContaCard: React.FC<ContaCardProps> = ({ nome, tipo, saldo }) => {
+const ContaCard: React.FC<ContaCardProps> = ({ id, nome, tipo, saldo, onDelete, onUpdated }) => {
+  const [showMenu, setShowMenu] = useState(false);
+
   return (
-    <div className="flex py-4 items-center px-4 border-t border-gray-100">
-      <div className="flex w-full justify-between pr-8">
-        <p className="text-base">{nome}</p>
-        <p className="text-base">{tipo}</p>
-        <p className="text-base">R$ {saldo.toFixed(2)}</p>
-      </div>
-      <div>
-        <button className="px-4 py-2 bg-fundocaixas text-lg rounded hover:bg-blue-600 border border-gray-100 text-white">
+    <div className="grid grid-cols-[1fr_1fr_1fr_auto] items-center w-3/4">
+      <p className="text-base text-[#1f1f21] font-normal">{nome}</p>
+      <p className="text-base text-[#1f1f21] font-normal">{tipo}</p>
+      <p className="text-base text-[#1f1f21] font-normal">R$ {saldo.toFixed(2)}</p>
+
+      <div className="relative">
+        <button
+          onClick={() => setShowMenu(!showMenu)}
+          className="px-4 py-2 bg-fundocaixas text-lg rounded hover:bg-blue-600 border border-gray-100 text-white"
+        >
           ...
         </button>
+
+        {showMenu && (
+          <div className="absolute right-0 mt-2 bg-white text-black rounded shadow-md z-10">
+            <EditarDialog
+              id={id}
+              currentName={nome}
+              currentType={tipo}
+              currentBalance={saldo}
+              onUpdated={onUpdated}
+            />
+            <button
+              onClick={() => {
+                onDelete(id);
+                setShowMenu(false);
+              }}
+              className="block px-4 py-2 hover:bg-gray-100 w-full text-left text-red-600"
+            >
+              Apagar
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
