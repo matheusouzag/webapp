@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import ContaCard from "@/components/ContaCard";
 import CriarDialog from "@/components/CriarDialog";
+import TransferirDialog from "@/components/TransferirDialog";
 
 interface Conta {
   id: number;
@@ -46,7 +47,7 @@ export default function Home() {
         <h1 className="text-2xl font-black">Gestor Financeiro Pessoal</h1>
         <p className="text-lg text-gray-600">Organize suas finanças com precisão</p>
       </div>
-      <div className="bg-white w-11/12 mt-12">
+      <div className="bg-white w-[1200px] mt-12">
         <div className="flex justify-between py-4 bg-white">
           <div className="bg-white">
             <CriarDialog />
@@ -54,10 +55,7 @@ export default function Home() {
   border-black text-white mr-3">
               Histórico
             </button>
-            <button className="w-24 py-2 bg-black text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
-  border-black text-white mr-3">
-              Transferir
-            </button>
+            <TransferirDialog />
           </div>
           <div className="px-5 py-4 border border-black text-white bg-black text-center rounded-xl hover:bg-white hover:text-black transition ease-in-out duration-300 hover:scale-105">
             <p className="text-base mb-2">Contas criadas</p>
@@ -65,14 +63,7 @@ export default function Home() {
           </div>
         </div>
         <div className="bg-white py-6">
-          <div className="grid grid-cols-[1fr_1fr_1fr_auto] font-semibold text-lg text-gray-600 pb-4 w-3/4">
-            <p className="text-base text-black">Nome</p>
-            <p className="text-base text-black">Tipo</p>
-            <p className="text-base text-black">Saldo</p>
-            <p className="text-base text-black">Ações</p>
-          </div>
-
-          <div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
             {contas.map((conta) => (
               <ContaCard
                 key={conta.id}
@@ -85,6 +76,14 @@ export default function Home() {
               />
             ))}
           </div>
+        </div>
+        <div className="flex">
+          <h2>Gastos</h2>
+          <button>+</button>
+        </div>
+        <div className="flex">
+          <h2>Ganhos</h2>
+          <button>+</button>
         </div>
       </div>
     </main>

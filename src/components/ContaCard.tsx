@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import EditarDialog from './EditarDialog';
 
 interface ContaCardProps {
@@ -14,17 +14,17 @@ const ContaCard: React.FC<ContaCardProps> = ({ id, nome, tipo, saldo, onDelete, 
   const [showMenu, setShowMenu] = useState(false);
 
   return (
-    <div className="grid grid-cols-[1fr_1fr_1fr_auto] items-center w-3/4">
-      <p className="text-base text-[#1f1f21] font-normal">{nome}</p>
-      <p className="text-base text-[#1f1f21] font-normal">{tipo}</p>
-      <p className="text-base text-[#1f1f21] font-normal">R$ {saldo.toFixed(2)}</p>
+    <div className="bg-gray-100 px-4 py-6 rounded shadow-md w-full flex flex-col justify-between relative gap-1 transition ease-in-out duration-300 hover:scale-95">
+      <p className="text-sm text-black font-semibold">Nome: <span className="font-normal">{nome}</span></p>
+      <p className="text-sm text-black font-semibold">Tipo: <span className="font-normal">{tipo}</span></p>
+      <p className="text-sm text-black font-semibold">Saldo: <span className="font-normal">R$ {saldo.toFixed(2)}</span></p>
 
-      <div className="relative">
+      <div className="absolute top-2 right-2">
         <button
           onClick={() => setShowMenu(!showMenu)}
-          className="px-4 py-2 bg-fundocaixas text-lg rounded hover:bg-blue-600 border border-gray-100 text-white"
+          className="text-lg font-bold px-2 py-1 bg-gray-100 text-black rounded"
         >
-          ...
+          ⋮
         </button>
 
         {showMenu && (
@@ -34,12 +34,14 @@ const ContaCard: React.FC<ContaCardProps> = ({ id, nome, tipo, saldo, onDelete, 
               currentName={nome}
               currentType={tipo}
               currentBalance={saldo}
-              onUpdated={onUpdated}
+              onUpdated={() => {
+                setShowMenu(false); 
+              }}
             />
             <button
               onClick={() => {
                 onDelete(id);
-                setShowMenu(false);
+                setShowMenu(false); 
               }}
               className="block px-4 py-2 hover:bg-gray-100 w-full text-left text-red-600"
             >
