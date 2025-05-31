@@ -61,8 +61,8 @@ export default function CriarDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="w-24 py-2 bg-black text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
-  border-black text-white mr-3">
+        <button className="w-24 py-2 bg-fundo text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
+  border-black text-white">
           Criar
         </button>
       </DialogTrigger>
