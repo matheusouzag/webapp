@@ -113,8 +113,8 @@ export default function TransacaoDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="w-40 py-2 px-4 bg-black text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
-  border-black text-white mr-3">
+        <button className="w-40 py-2 px-4 bg-fundo text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
+  border-black text-white">
           Gastos/Ganhos
         </button>
       </DialogTrigger>

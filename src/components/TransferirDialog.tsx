@@ -99,7 +99,7 @@ export default function TransferirDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="w-24 py-2 bg-black text-sm rounded-xl hover:bg-white hover:text-black border border-black text-white transition hover:scale-105 mr-3">
+        <button className="w-24 py-2 bg-fundo text-sm rounded-xl hover:bg-white hover:text-black border border-black text-white transition hover:scale-105">
           Transferir
         </button>
       </DialogTrigger>
