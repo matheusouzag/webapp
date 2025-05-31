@@ -23,6 +23,8 @@ interface Transacao {
   date: string;
   accountOrigin?: { name: string };
   accountDestination?: { name: string };
+  accountOriginName?: string;           
+  accountDestinationName?: string;      
 }
 
 
@@ -115,7 +117,7 @@ const fetchTransacoes = async () => {
               <GastoCard
                 key={t.id}
                 tipo={t.type}
-                conta={t.accountOrigin?.name || "Desconhecida"}
+                conta={t.accountOrigin?.name || t.accountOriginName || "Conta removida"}
                 valor={t.value}
                 descricao={t.description}
                 data={t.date}
@@ -131,7 +133,7 @@ const fetchTransacoes = async () => {
               <GanhoCard
                 key={t.id}
                 tipo={t.type}
-                conta={t.accountDestination?.name || "Desconhecida"}
+                conta={t.accountDestination?.name || t.accountDestinationName || "Conta removida"}
                 valor={t.value}
                 descricao={t.description}
                 data={t.date}
