@@ -16,9 +16,6 @@ export default {
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
-  			fundo: '#080c11',
-  			fundocard: '#2b2f32',
-  			fundocaixas: '#474a4f',
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -56,7 +53,10 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
-  			}
+  			},
+			fundo: '#1B1E23',
+			primarycolor: '#ffd200',
+			secondarycolor: '#344EA2',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',

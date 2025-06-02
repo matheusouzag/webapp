@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useEffect } from "react";
 import axios from "axios";
 import {
@@ -20,13 +21,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { NotePencil } from "phosphor-react";
 
 interface EditarDialogProps {
   id: number;
   currentName: string;
   currentType: string;
   currentBalance: number;
-  onUpdated: () => void; 
+  onUpdated: () => void;
 }
 
 export default function EditarDialog({
@@ -86,23 +88,26 @@ export default function EditarDialog({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="block px-4 py-2 hover:bg-gray-100 w-full text-left">
-          Editar
+        <button className="hover:text-gray-400 transition-all">
+          <NotePencil size={32} />
         </button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md card">
         <DialogHeader>
-          <DialogTitle>Editar Conta</DialogTitle>
-          <DialogDescription>Altere os dados e salve as mudanças.</DialogDescription>
+          <DialogTitle className="text-gray-100">Editar Conta</DialogTitle>
+          <DialogDescription className="text-gray-300/70">
+            Altere os dados da conta e salve as mudanças.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="name">Nome</Label>
+            <Label htmlFor="name" className="text-gray-100">Nome</Label>
             <Input
               id="name"
               name="name"
+              className="bg-white/20 placeholder:text-gray-300 text-gray-300"
               value={form.name}
               onChange={handleChange}
               required
@@ -110,12 +115,12 @@ export default function EditarDialog({
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="type">Tipo</Label>
+            <Label htmlFor="type" className="text-gray-100">Tipo</Label>
             <Select onValueChange={handleTipoChange} value={form.type}>
-              <SelectTrigger id="type">
+              <SelectTrigger className="w-full bg-white/20 text-gray-300">
                 <SelectValue placeholder="Tipo da Conta" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-200">
                 <SelectItem value="Corrente">Corrente</SelectItem>
                 <SelectItem value="Poupança">Poupança</SelectItem>
                 <SelectItem value="Carteira">Carteira</SelectItem>
@@ -124,18 +129,23 @@ export default function EditarDialog({
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="balance">Saldo</Label>
+            <Label htmlFor="balance" className="text-gray-100">Saldo</Label>
             <Input
               id="balance"
               name="balance"
               type="number"
+              className="bg-white/20 placeholder:text-gray-300 text-gray-300"
               value={form.balance}
               onChange={handleChange}
             />
           </div>
 
           <DialogFooter className="pt-2">
-            <Button type="submit" disabled={loading}>
+            <Button
+              className="button-primary hover:bg-gray-300"
+              type="submit"
+              disabled={loading}
+            >
               {loading ? "Salvando..." : "Salvar"}
             </Button>
           </DialogFooter>

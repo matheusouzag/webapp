@@ -13,9 +13,16 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { PlusCircle } from "phosphor-react";
 
-export default function CriarDialog() {
+export default function CriarDialog({ onAtualizar }: { onAtualizar?: () => void }) {
   const [form, setForm] = useState({
     name: "",
     type: "",
@@ -46,10 +53,10 @@ export default function CriarDialog() {
         balance: form.balance ? Number(form.balance) : 0,
       };
 
-      const response = await axios.post("http://localhost:3001/accounts", payload);
+      await axios.post("http://localhost:3001/accounts", payload);
       setSuccessMessage("Conta criada com sucesso!");
       setForm({ name: "", type: "", balance: "" });
-
+      onAtualizar?.(); 
     } catch (error: any) {
       console.error("Erro ao criar conta:", error);
       alert("Erro ao criar conta: " + (error.response?.data?.message || error.message));
@@ -61,21 +68,20 @@ export default function CriarDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="w-24 py-2 bg-black text-sm rounded-xl hover:bg-white hover:text-black border transition ease-in-out duration-300 hover:scale-105 
-  border-black text-white mr-3">
-          Criar
-        </button>
+        <button className="button-primary px-4 py-2"><PlusCircle size={24} />Criar Conta </button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md card">
         <DialogHeader>
-          <DialogTitle>Criar Nova Conta</DialogTitle>
-          <DialogDescription>Preencha os dados para criar uma nova conta.</DialogDescription>
+          <DialogTitle className="text-gray-100">Criar Nova Conta</DialogTitle>
+          <DialogDescription className="text-gray-300/70">
+            Preencha os dados para criar uma nova conta.
+          </DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label htmlFor="name">Nome da Conta</Label>
+            <Label htmlFor="name" className="text-gray-100">Nome da Conta</Label>
             <Input
               id="name"
               name="name"
@@ -83,16 +89,17 @@ export default function CriarDialog() {
               onChange={handleChange}
               required
               placeholder="Ex: Conta Corrente XP"
+              className="bg-white/20 placeholder:text-gray-300 text-gray-300"
             />
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="type">Tipo da Conta</Label>
+            <Label htmlFor="type" className="text-gray-100">Tipo da Conta</Label>
             <Select onValueChange={handleTipoChange} value={form.type}>
-              <SelectTrigger id="type" className="w-full">
+              <SelectTrigger id="type" className="w-full bg-white/20 !text-gray-300">
                 <SelectValue placeholder="Selecione o tipo" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-200">
                 <SelectItem value="Corrente">Corrente</SelectItem>
                 <SelectItem value="Poupança">Poupança</SelectItem>
                 <SelectItem value="Carteira">Carteira</SelectItem>
@@ -101,7 +108,7 @@ export default function CriarDialog() {
           </div>
 
           <div className="grid gap-2">
-            <Label htmlFor="balance">Saldo Inicial (opcional)</Label>
+            <Label htmlFor="balance" className="text-gray-100">Saldo Inicial (opcional)</Label>
             <Input
               id="balance"
               name="balance"
@@ -109,19 +116,20 @@ export default function CriarDialog() {
               value={form.balance}
               onChange={handleChange}
               placeholder="R$ 0,00"
+              className="bg-white/20 placeholder:text-gray-300 text-gray-300"
             />
           </div>
 
           <DialogFooter className="pt-2">
-            <Button type="submit" disabled={loading}>
+            <Button className="button-primary hover:bg-gray-300" type="submit" disabled={loading}>
               {loading ? "Salvando..." : "Salvar"}
             </Button>
           </DialogFooter>
-        </form>
 
-        {successMessage && (
-          <p className="text-green-600 text-sm pt-2">{successMessage}</p>
-        )}
+          {successMessage && (
+            <p className="text-green-600 text-sm">{successMessage}</p>
+          )}
+        </form>
       </DialogContent>
     </Dialog>
   );
