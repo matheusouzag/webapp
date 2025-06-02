@@ -89,7 +89,7 @@ Foi adotado conceitos de **Orientação a Objetos** através de:
 
 ## 🏛️ Estrutura do Projeto
 
-### Frontend (`interface-financas/`)
+### Frontend (`webapp`)
 - **public/images** → imagens.
 - **src/contas**, **src/historico**, **src/interno** → páginas do app.
 - **src/components/** → todos os componentes reutilizáveis (cards, modais, dialogs, header/footer).
