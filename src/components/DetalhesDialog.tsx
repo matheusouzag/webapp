@@ -1,4 +1,10 @@
-import { Dialog, DialogContent, DialogTrigger, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface DetalhesDialogProps {
   tipo: string;
@@ -20,16 +26,29 @@ export default function DetalhesDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+      <DialogContent className="card sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Detalhes da Transação</DialogTitle>
+          <DialogTitle className="text-gray-100">Detalhes da Transação</DialogTitle>
         </DialogHeader>
-        <div className="space-y-2 text-sm text-gray-800">
-          <p><strong>Tipo:</strong> {tipo}</p>
-          <p><strong>Conta:</strong> {conta}</p>
-          <p><strong>Valor:</strong> R$ {valor.toFixed(2)}</p>
-          {descricao && <p><strong>Descrição:</strong> {descricao}</p>}
-          <p><strong>Data:</strong> {new Date(data).toLocaleString("pt-BR")}</p>
+        <div className="space-y-2 text-sm text-gray-300 pt-2">
+          <p>
+            <span className="text-gray-100 font-semibold">Tipo:</span> {tipo}
+          </p>
+          <p>
+            <span className="text-gray-100 font-semibold">Conta:</span> {conta}
+          </p>
+          <p>
+            <span className="text-gray-100 font-semibold">Valor:</span> R$ {valor.toFixed(2)}
+          </p>
+          {descricao && (
+            <p>
+              <span className="text-gray-100 font-semibold">Descrição:</span> {descricao}
+            </p>
+          )}
+          <p>
+            <span className="text-gray-100 font-semibold">Data:</span>{" "}
+            {new Date(data).toLocaleString("pt-BR")}
+          </p>
         </div>
       </DialogContent>
     </Dialog>

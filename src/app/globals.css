@@ -121,5 +121,64 @@
 }
 
 .card {
-  @apply bg-white/10 border border-gray-100
+  @apply border border-white/40 bg-white/15 backdrop-blur-2xl shadow-md rounded-xl;
+}
+
+.button-primary {
+  @apply bg-white/20 border border-gray-600 hover:bg-gray-300 rounded-lg transition-all duration-300 font-bold text-gray-300 hover:text-black flex gap-2 items-center justify-center
+}
+
+.button-secondary {
+  @apply bg-none border border-white hover:bg-white/20 rounded-lg transition-all duration-300 font-bold text-gray-300 flex gap-2 items-center justify-center
+} 
+
+.animacao {
+  opacity: 0;
+  animation: fadeIn 2s forwards;
+}
+
+.animacao-delay {
+  opacity: 0;
+  animation: fadeInOut 3s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInOut {
+  0% {
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+  }
+}
+
+
+::-webkit-scrollbar {
+  @apply w-[5px] h-[6px] rounded-3xl hover:text-gray-500/70 transition-all;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500  transition-all rounded-3xl;
+}
+
+input {
+  background-color: #ffffff20 !important;
+}
+
+.ring-offset-background {
+  color: #d1d5db;
 }
