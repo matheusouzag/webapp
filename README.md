@@ -139,5 +139,5 @@ Foi adotado conceitos de **Orientação a Objetos** através de:
    ```bash
    npm run dev
    ```
-🌐 O frontend está rodando localmente em: [http://localhost:3000](http://localhost:3000)
 ---
+🌐 O frontend está rodando localmente em: [http://localhost:3000](http://localhost:3000)
