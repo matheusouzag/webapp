@@ -121,7 +121,7 @@ interface-financas/
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/matheusouzag/webapp-backend.git
+   git clone https://github.com/matheusouzag/webapp.git
    cd webapp-backend
    ```
 2. Vá para a pasta frontend:
