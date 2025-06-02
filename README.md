@@ -1,6 +1,6 @@
 # 📊 Gestor Financeiro Pessoal
 
-[Código Back-end](https://github.com/matheusouzag/webapp-backend)
+[Código Back-end](https://github.com/matheusouzag/webapp-backend)(Rodar em conjunto)
 
 Este projeto é uma aplicação web completa para gerenciamento de finanças pessoais, usando **Next.js** no front-end e **Node.js + Express + TypeORM** no back-end, permitindo cadastro de contas, registro de transações e transferências entre contas.
 
