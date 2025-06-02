@@ -1,30 +1,73 @@
 "use client";
 
 import Link from "next/link";
+import TransferirDialog from "./TransferirDialog";
+import TransacaoDialog from "./TransacaoDialog";
+import { ClockCounterClockwise, UserSwitch, List } from "phosphor-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Header() {
+  const router = useRouter();
+  const [menuAberto, setMenuAberto] = useState(false);
+
   return (
-    <div className="text-center bg-fundo p-5 shadow-lg border-b border-gray-400 w-full text-white rounded-b-3xl">
-      <div className="max-w-7xl m-auto md:flex justify-between md:pr-4 items-center">
-        <div className="mb-4 md:mb-0">
-          <Link href="/">
-            <div className="cursor-pointer">
-              <h1 className="text-xl md:text-2xl font-black max-w-7xl m-auto text-center md:text-left px-4">
-                Gestor Financeiro Pessoal
-              </h1>
-              <p className="text-base md:text-lg text-gray-300 max-w-7xl m-auto text-center md:text-left px-4">
-                Organize suas finanças com precisão
-              </p>
-            </div>
-          </Link>
+    <header className="bg-fundo px-4 py-4 shadow-lg border-b border-gray-400 text-white z-50 animacao rounded-b-3xl relative">
+      <div className="max-w-screen-xl mx-auto flex justify-between items-center">
+        <Link href="/" className="flex items-center gap-2">
+          <img className="h-10 block lg:hidden" src="/images/logo.png" alt="Logo" />
+          <img className="h-12 hidden lg:block" src="/images/controle+.png" alt="Controle+" />
+        </Link>
+
+        <div className="md:hidden">
+          <button
+            onClick={() => setMenuAberto(!menuAberto)}
+            className="focus:outline-none"
+          >
+            <List size={32} />
+          </button>
         </div>
 
-        <Link href="/historico">
-          <button className="w-24 py-2 bg-white text-sm md:text-base font-bold rounded-xl hover:bg-white hover:text-black border border-black text-black transition hover:scale-105">
+        <div className="hidden md:flex gap-4 items-center">
+          <TransferirDialog />
+          <TransacaoDialog />
+          <button
+            onClick={() => router.push("/historico")}
+            className="button-primary px-4 py-2 flex items-center gap-2"
+          >
+            <ClockCounterClockwise size={20} />
             Histórico
           </button>
-        </Link>
+          <button
+            onClick={() => router.push("/contas")}
+            className="button-primary px-4 py-2 flex items-center gap-2"
+          >
+            <UserSwitch size={20} />
+            Alterar Conta
+          </button>
+        </div>
       </div>
-    </div>
+
+      {menuAberto && (
+      <div className="md:hidden w-full bg-fundo border-t border-gray-700 px-4 py-4 flex flex-col gap-3 z-40">
+          <TransferirDialog />
+          <TransacaoDialog />
+          <button
+            onClick={() => router.push("/historico")}
+            className="button-primary px-4 py-2 flex items-center gap-2"
+          >
+            <ClockCounterClockwise size={20} />
+            Histórico
+          </button>
+          <button
+            onClick={() => router.push("/contas")}
+            className="button-primary px-4 py-2 flex items-center gap-2"
+          >
+            <UserSwitch size={20} />
+            Alterar Conta
+          </button>
+        </div>
+      )}
+    </header>
   );
 }

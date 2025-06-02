@@ -1,4 +1,5 @@
 "use client";
+import { ArrowsLeftRight } from "phosphor-react";
 import {
   Dialog,
   DialogContent,
@@ -20,15 +21,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
-interface Conta {
-  id: number;
-  name: string;
-  balance: number;
-}
+import { ContaDTO } from "@/dtos/Contas.dto";
 
 export default function TransferirDialog() {
-  const [contas, setContas] = useState<Conta[]>([]);
+  const [contas, setContas] = useState<ContaDTO[]>([]);
   const [origemId, setOrigemId] = useState<string>("");
   const [destinoId, setDestinoId] = useState<string>("");
   const [valor, setValor] = useState("");
@@ -40,17 +36,28 @@ export default function TransferirDialog() {
   const [erroTransferencia, setErroTransferencia] = useState("");
 
   useEffect(() => {
-    const fetchContas = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/accounts");
-        setContas(response.data);
-      } catch (error) {
-        console.error("Erro ao buscar contas:", error);
-      }
-    };
-    fetchContas();
+    fetchContas(setContas);
   }, []);
 
+
+  async function fetchContas(setContas: Function) {
+  try {
+    const response = await axios.get("http://localhost:3001/accounts");
+    setContas(response.data);
+
+    const contaAntigaString = localStorage.getItem('conta');
+    if (contaAntigaString) {
+      const contaAntiga: ContaDTO = JSON.parse(contaAntigaString);
+      const novaConta = response.data.find((c: ContaDTO) => c.id === contaAntiga.id);
+      if (novaConta) {
+        localStorage.setItem('conta', JSON.stringify(novaConta));
+        window.dispatchEvent(new Event("contaAtualizada"));
+      }
+    }
+  } catch (error) {
+    console.error("Erro ao buscar contas:", error);
+  }
+}
   const handleOrigemChange = (value: string) => {
     setOrigemId(value);
     setErroTransferencia("");
@@ -88,6 +95,7 @@ export default function TransferirDialog() {
       setValor("");
       setDescricao("");
       setSaldoOrigem(0);
+      fetchContas(setContas);
     } catch (error: any) {
       console.error("Erro ao transferir:", error);
       setErroTransferencia(error.response?.data?.message || error.message);
@@ -99,24 +107,25 @@ export default function TransferirDialog() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button className="w-24 py-2 bg-fundo text-sm rounded-xl hover:bg-white hover:text-black border border-black text-white transition hover:scale-105">
+        <button className="button-primary px-4 py-2">
+          <ArrowsLeftRight size={24} />
           Transferir
         </button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md card">
         <DialogHeader>
-          <DialogTitle>Nova Transferência</DialogTitle>
-          <DialogDescription>Preencha os dados para transferir entre contas.</DialogDescription>
+          <DialogTitle className="text-gray-100">Nova Transferência</DialogTitle>
+          <DialogDescription className="text-gray-300/70">Preencha os dados para transferir entre contas.</DialogDescription>
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <Label>Conta de Origem</Label>
+            <Label className="text-gray-100">Conta de Origem</Label>
             <Select value={origemId} onValueChange={handleOrigemChange}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white/20 !text-gray-300">
                 <SelectValue placeholder="Selecione a conta de origem" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-200">
                 {contas.map((conta) => (
                   <SelectItem key={conta.id} value={conta.id.toString()}>
                     {conta.name}
@@ -125,17 +134,19 @@ export default function TransferirDialog() {
               </SelectContent>
             </Select>
             {origemId && (
-              <p className="text-sm text-gray-500">Saldo disponível: R$ {saldoOrigem.toFixed(2)}</p>
+              <p className="text-sm text-gray-300">
+                Saldo disponível: R$ {saldoOrigem.toFixed(2)}
+              </p>
             )}
           </div>
 
           <div className="grid gap-2">
-            <Label>Conta de Destino</Label>
+            <Label className="text-gray-100">Conta de Destino</Label>
             <Select value={destinoId} onValueChange={setDestinoId}>
-              <SelectTrigger className="w-full">
+              <SelectTrigger className="w-full bg-white/20 !text-gray-300">
                 <SelectValue placeholder="Selecione a conta de destino" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="bg-gray-200">
                 {contas
                   .filter((conta) => conta.id.toString() !== origemId)
                   .map((conta) => (
@@ -148,8 +159,9 @@ export default function TransferirDialog() {
           </div>
 
           <div className="grid gap-2">
-            <Label>Valor</Label>
+            <Label className="text-gray-100">Valor</Label>
             <Input
+              className="bg-white/20 placeholder:text-gray-300 text-gray-300"
               type="text"
               inputMode="decimal"
               pattern="^\d*\.?\d*$"
@@ -166,8 +178,9 @@ export default function TransferirDialog() {
           </div>
 
           <div className="grid gap-2">
-            <Label>Descrição (opcional)</Label>
+            <Label className="text-gray-100">Descrição (opcional)</Label>
             <Input
+              className="placeholder:text-gray-300 text-gray-300"
               value={descricao}
               onChange={(e) => setDescricao(e.target.value)}
               placeholder="Ex: transferência mensal"
@@ -175,7 +188,7 @@ export default function TransferirDialog() {
           </div>
 
           <DialogFooter className="pt-2">
-            <Button type="submit" disabled={loading || !origemId || !destinoId}>
+            <Button className="button-primary hover:bg-gray-300" type="submit" disabled={loading || !origemId || !destinoId}>
               {loading ? "Processando..." : "Transferir"}
             </Button>
           </DialogFooter>

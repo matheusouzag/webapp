@@ -54,7 +54,9 @@ export default {
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
   			},
-			fundo: '#1B1E23'
+			fundo: '#1B1E23',
+			primarycolor: '#ffd200',
+			secondarycolor: '#344EA2',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
